@@ -1,0 +1,209 @@
+<!DOCTYPE html><html lang="en" class="no-js">
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-MC35ML');</script><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unity - Manual:  Getting started</title>
+<meta name="description" content="The Unity Manual helps you learn and use the Unity engine. With the Unity engine you can create 2D and 3D games, apps and experiences.">
+<meta name="author" content="Unity Technologies">
+<link rel="shortcut icon" href="../StaticFilesManual/images/favicons/favicon.ico">
+<link rel="icon" type="image/png" href="../StaticFilesManual/images/favicons/favicon.png">
+<link rel="apple-touch-icon-precomposed" sizes="152x152" href="../StaticFilesManual/images/favicons/apple-touch-icon-152x152.png">
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../StaticFilesManual/images/favicons/apple-touch-icon-144x144.png">
+<link rel="apple-touch-icon-precomposed" sizes="120x120" href="../StaticFilesManual/images/favicons/apple-touch-icon-120x120.png">
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="../StaticFilesManual/images/favicons/apple-touch-icon-114x114.png">
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="../StaticFilesManual/images/favicons/apple-touch-icon-72x72.png">
+<link rel="apple-touch-icon-precomposed" href="../StaticFilesManual/images/favicons/apple-touch-icon.png">
+<meta name="msapplication-TileColor" content="#222c37">
+<meta name="msapplication-TileImage" content="../StaticFilesManual/images/favicons/tileicon-144x144.png">
+<script type="text/javascript" src="../StaticFilesManual/js/jquery.js?ts=1503756017"></script><script type="text/javascript" src="../StaticFilesManual/js/core.js?ts=1503756017"></script><script type="text/javascript" src="docdata/toc.js?ts=1503756017"></script><script type="text/javascript" src="docdata/global_toc.js?ts=1503756017"></script><link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700,400italic" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="../StaticFilesManual/css/core.css?ts=1503756017">
+</head>
+<body>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MC35ML" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<div class="header-wrapper">
+<div id="header" class="header"><div class="content">
+<div class="spacer"><div class="menu">
+<div class="logo"><a href="https://docs.unity3d.com"></a></div>
+<div class="search-form"><form action="30_search.html" method="get" class="apisearch">
+<input type="text" name="q" placeholder="Search manual..." autosave="Unity Reference" results="5" class="sbox field" id="q"><input type="submit" class="submit">
+</form></div>
+<ul>
+<li><a href="../Manual/index.html" class="selected">Manual</a></li>
+<li><a href="../ScriptReference/index.html">Scripting API</a></li>
+</ul>
+</div></div>
+<div class="more">
+<div class="filler"></div>
+<ul><li><a href="https://unity3d.com/">unity3d.com</a></li></ul>
+</div>
+</div></div>
+<div class="toolbar"><div class="content">
+<div class="version-number">Version: <b>2017.1</b> (<a href="https://docs.unity3d.com/2017.2/Documentation/Manual">switch to 2017.2b</a>)</div>
+<div class="lang-switcher">
+<div class="current toggle" data-target=".lang-list">
+<div class="lbl">Language: <span class="b">English</span>
+</div>
+<div class="arrow"></div>
+</div>
+<div class="lang-list" style="display:none;"><ul>
+<li><a href="/Manual/GettingStarted.html">English</a></li>
+<li><a href="/ja/current/Manual/GettingStarted.html">日本語</a></li>
+<li><a href="/es/current/Manual/GettingStarted.html">Español</a></li>
+<li><a href="/kr/current/Manual/GettingStarted.html">한국어</a></li>
+<li><a href="/ru/current/Manual/GettingStarted.html">Русский</a></li>
+</ul></div>
+</div>
+</div></div>
+</div>
+<div id="master-wrapper" class="master-wrapper clear">
+<div id="sidebar" class="sidebar"><div class="sidebar-wrap"><div class="content"><div class="sidebar-menu"><div class="toc"><h2>Unity Manual</h2></div></div></div></div></div>
+<div id="content-wrap" class="content-wrap"><div class="content-block"><div class="content">
+<div class="section">
+<div class="breadcrumbs clear"><ul>
+<li><a href="UnityManual.html">Unity User Manual (2017.1)</a></li>
+<li><a href="UnityOverview.html">Working in Unity</a></li>
+<li><a href="UnityBasics.html">Basics</a></li>
+<li> Getting started</li>
+</ul></div>
+<div class="mb20"><div class="nextprev clear">
+<div class="icon tt left mr1" data-distance="-40|-30|top">
+<span class="prev"><a href="2Dor3D.html"></a></span><div class="tip">2D or 3D projects</div>
+</div>
+<div class="icon tt right" data-distance="-40|-30|top">
+<span class="next"><a href="learn-tab.html"></a></span><div class="tip">The Learn tab</div>
+</div>
+</div></div>
+<div class="otherversionswrapper" onmouseover="setOtherVersionsDisplay(true)" onmouseout="setOtherVersionsDisplay(false)">
+<a>Other Versions</a><div class="otherversionscontent" id="OtherVersionsContent" style="display: none;">Cannot access other versions offline!</div>
+</div>
+<h1>Getting started</h1>
+<!--BeginSwitchLink--><!--EndSwitchLink-->
+<div class="clear"></div>
+
+<h2>Starting Unity for the first time</h2>
+
+<p>When you launch the Unity Editor, the Home Screen appears. If you have no existing Unity Projects on your computer, or if this is your first time opening the Unity Editor, the Home Screen displays the <a href="learn-tab.html">Learn</a> tab.</p>
+
+<figure>
+<img src="../uploads/Main/GettingStarted5.png" alt="The Learn tab in the Home Screen">
+<figcaption>The Learn tab in the Home Screen</figcaption>
+</figure>
+
+<p>From the Learn tab, you can access tutorials and learning resources to help you get started with Unity. If you are new to using Unity, you should work through the Unity Learn tutorials before starting a new project.</p>
+
+<h2>The Projects tab</h2>
+
+<p>From the Home Screen, click <strong>Projects</strong> to view the <strong>Projects</strong> tab. </p>
+
+<figure>
+<img src="../uploads/Main/GettingStarted1.png" alt="The Project tab in the Home Screen">
+<figcaption>The Project tab in the Home Screen</figcaption>
+</figure>
+
+<p>To open a new Project, click <strong>New. </strong>This opens the <strong>Create Project</strong> view. </p>
+
+<p>To open an existing Unity Project stored on your computer, click the Project name in the <strong>Projects</strong> tab, or click <strong>Open</strong> to browse your computer for the Project folder. </p>
+
+<p>To access <a href="UnityCollaborate.html">Unity Collaborate</a> Projects, click <strong>In The Cloud</strong>, then select the Project that you want to load. You will then be prompted to chose a storage location for this project on your computer.</p>
+
+<h3>Creating a Project</h3>
+
+<p>
+<img src="../uploads/Main/GettingStarted3.png" alt="">
+In the top right corner of the Home Screen, click ‘New’ to see the <strong>Create Project</strong> window.</p>
+
+<p>To access the Home Screen when you are already in the Unity Editor, go to <strong>File</strong> &gt; <strong>New Project</strong> ….</p>
+
+<p>From the <strong>Create Project</strong> window, there are various starter settings for you to apply before Unity creates your project. These are described in detail below. </p>
+
+<figure>
+<img src="../uploads/Main/GettingStarted4.png" alt="The Home Screen’s Create Project window">
+<figcaption>The Home Screen’s Create Project window</figcaption>
+</figure>
+
+<table>
+<colgroup>
+<col style="text-align:left;">
+<col style="text-align:left;">
+</colgroup>
+
+<thead>
+<tr>
+	<th style="text-align:left;"><strong>Setting</strong></th>
+	<th style="text-align:left;"><strong>Function</strong></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+	<td style="text-align:left;"><strong>Project name</strong></td>
+	<td style="text-align:left;">Set the name of your Project. This names the folder which stores the Assets, Scenes and other files related to your Project. This defaults to <em>New Unity Project</em>, and you can change it at any time.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><strong>Location</strong></td>
+	<td style="text-align:left;">Use this to define where in your computer’s file system to store your Project. The location of your Project defaults to the home folder on your computer. To change it, type the file path to your prefered storage location into the <strong>Location</strong> field. Alternatively, click the three blue dots in the <strong>Location</strong> field. This opens your computer’s file browser (Explorer, Finder or Files, depending on your computer’s operating system). In your file browser, navigate to the folder that you want to store your Project in, and click <strong>Select Folder</strong> or <strong>Open</strong>.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><strong>3D / 2D</strong></td>
+	<td style="text-align:left;">Choose whether your project is in 2D or 3D. This sets up various presets in Unity to make getting started easier. This is set to 3D by default. If you aren’t sure which to choose, leave it as 3D. To change this setting in the Editor later, click the 2D button in the <a href="SceneViewNavigation.html">Scene view</a>.</td>
+</tr>
+<tr>
+	<td style="text-align:left;"><strong>Add Asset Package</strong></td>
+	<td style="text-align:left;">If you want to, you can use this to add pre-made content to your Project. The Asset Packages provided with Unity include pre-made models, particle effects and example scripts, along with other useful tools and content.<br><br>To import Unity-provided Asset Packages into your Project, click the <strong>Add Asset Package</strong> button, then tick the checkbox to the left of each Asset Package you want to import, and click <strong>Done</strong>. Unity automatically imports the selected Assets when your Project is created. The <strong>Add Asset Package</strong> screen also contains any Assets you have downloaded from the <a href="https://www.assetstore.unity3d.com">Unity Asset Store</a>.<br><br>You can also add Asset Packages later, once you’ve created your project. To do this in the Unity Editor, go to <strong>Assets</strong> &gt; <strong>Import Package</strong>, and select the package you want to import.</td>
+</tr>
+</tbody>
+</table>
+
+<p>Select <strong>Create Project</strong> when you’re done. Unity automatically generates the required files and creates your Project.</p>
+
+<h3>Opening a Project</h3>
+
+<p>The Home Screen’s <strong>Project</strong> tab lists any Project you have previously opened on this computer. Click on a Project in the list to open it.</p>
+
+<figure>
+<img src="../uploads/Main/GettingStarted2.png" alt="A Project listed in the Projects tab ">
+<figcaption>A Project listed in the <strong>Projects</strong> tab
+</figcaption>
+</figure>
+
+<p>If the Editor is newly installed, or you haven’t yet opened the Project you need in this installation of Unity, click <strong>Open</strong> to open your file browser and locate the Project folder. Note that a Unity Project is a collection of files and directories, rather than just one specific Unity Project file. To open a Project, you must select the main Project folder, rather than a specific file).</p>
+
+<p>To bring up the Home Screen’s <strong>Projects</strong> tab from inside the Unity Editor, go to <strong>File</strong> &gt; <strong>Open Project</strong>.</p>
+
+<p>
+<br><br>
+</p>
+
+<hr>
+
+<ul>
+<li><p><span class="page-edit">2017–05–22 Page amended with <a href="DocumentationEditorialReview.html">editorial review</a> - <a href="LeaveFeedback.html">Leave page feedback</a>
+</span></p></li>
+<li><p><span class="page-history">Learn tab added in 5.6</span></p></li>
+</ul>
+<div class="nextprev clear">
+<div class="icon tt left mr1" data-distance="-40|-30|top">
+<span class="prev"><a href="2Dor3D.html"></a></span><div class="tip">2D or 3D projects</div>
+</div>
+<div class="icon tt right" data-distance="-40|-30|top">
+<span class="next"><a href="learn-tab.html"></a></span><div class="tip">The Learn tab</div>
+</div>
+</div>
+</div>
+<div class="footer-wrapper"><div class="footer clear">
+<div class="copy">
+<user_feedback><a href="LeaveFeedback.html" target="_blank">Leave feedback</a></user_feedback><known_issues><p>Is something described here not working as you expect it to? It might be a <b>Known Issue</b>. Please check with the Issue Tracker at <a href="https://issuetracker.unity3d.com">issuetracker.unity3d.com</a>.</p></known_issues>Copyright © 2017 Unity Technologies. Publication: 2017.1-001Q. Built: 2017-08-29.</div>
+<div class="menu">
+<a href="https://unity3d.com/learn">Tutorials</a><a href="https://answers.unity3d.com">Community Answers</a><a href="https://support.unity3d.com/hc/en-us">Knowledge Base</a><a href="https://forum.unity3d.com">Forums</a><a href="https://unity3d.com/asset-store">Asset Store</a>
+</div>
+</div></div>
+</div></div></div>
+</div>
+</body>
+</html>
