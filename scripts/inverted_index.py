@@ -1,17 +1,12 @@
 """
 Inverted index of the received documents.
-
-Contains 2 attributes to be used externally:
-    term_documents: {str: (int, {str:int})}
-    term_documents has as key a term (word) in the 
-
-    term_indexer: {str: int}
 """
 
 
 class InvertedIndex:
+    clean_function = None
+    processed_corpus = {}
     term_documents = {}
-    term_indexer = {}
 
     """
     Initializes the inverted index with the received corpus.
@@ -19,20 +14,22 @@ class InvertedIndex:
     :param corpus: [(str, [str])] list of document names and words
     """
 
-    def __init__(self, corpus):
-        self.__build_term_documents(corpus)
-        self.__build_term_indexer()
+    def __init__(self, corpus, clean_function = None):
+        self.clean_function = clean_function
+        self.__build_inverted_index(corpus)
 
     """
-    Creates the term_document dict based on the document_list.
+    Creates the term_document dict based on the document_list and process the corpus with the received clean function.
     
     :param corpus: [(str, [str])] list of document names and words
     """
 
-    def __build_term_documents(self, corpus):
+    def __build_inverted_index(self, corpus):
         for document in corpus:
             document_name = document[0]
-            document_words = document[1]
+            document_words = self.clean_function(document[1]) if self.clean_function is not None else document[1] 
+            self.processed_corpus[document_name] = document_words
+            
             for word in document_words:
                 if word not in self.term_documents:
                     self.term_documents[word] = (0, {})
@@ -43,13 +40,3 @@ class InvertedIndex:
                     self.term_documents[word][1]
                 )
                 self.term_documents[word][1][document_name] += 1
-
-    """
-    Creates the term_indexer, that is a map of each term to its respective index
-    """
-
-    def __build_term_indexer(self):
-        index = 0
-        for term in self.term_documents:
-            self.term_indexer[term] = index
-            index += 1
