@@ -1,6 +1,8 @@
 import os
 import re
 import stopwords_stemming
+from inverted_index import InvertedIndex
+from ranker import Ranker
 
 
 # DIRS
@@ -29,30 +31,24 @@ def clear_split_document (document):
 
 
 # SCRIPT
-document_terms_list = []
-document_terms_list_stop = []
-document_terms_list_stem = []
-document_terms_list_stop_stem = []
+corpus = []
 
 for _, _, files in os.walk (rootdir):
 	for file in files:
 		document = open (rootdir + '/' + file, mode='r', encoding='utf-8').read()
-		document_terms_original = clear_split_document (document)
-		
-		# print (document_terms)
-		document_terms = stopwords_stemming(document_terms_original, remove_stopwords = False, do_stemming = False)
-		document_terms_list.append((file, document_terms))
+		document_terms = clear_split_document (document)
 
-		document_terms = stopwords_stemming(document_terms_original, remove_stopwords = True, do_stemming = False)
-		document_terms_list_stop.append((file, document_terms))
+		corpus.append((file, document_terms))
 
-		document_terms = stopwords_stemming(document_terms_original, remove_stopwords = False, do_stemming = True)
-		document_terms_list_stem.append((file, document_terms))
-
-		document_terms = stopwords_stemming(document_terms_original, remove_stopwords = True, do_stemming = True)
-		document_terms_list_stop_stem.append((file, document_terms))
-		
 		# TODO: remove break
 		break
 
-# build_inverted_index
+document_clean_function = lambda document: stopwords_stemming(document, remove_stopwords = False, do_stemming = False)
+document_stop_function = lambda document: stopwords_stemming(document, remove_stopwords = True, do_stemming = False)
+document_stem_function = lambda document: stopwords_stemming(document, remove_stopwords = False, do_stemming = True)
+document_stop_stem_function = lambda document: stopwords_stemming(document, remove_stopwords = True, do_stemming = True)
+
+ranker_clean = Ranker(InvertedIndex(corpus, document_clean_function))
+ranker_stop = Ranker(InvertedIndex(corpus, document_stop_function))
+ranker_stem = Ranker(InvertedIndex(corpus, document_stem_function))
+ranker_stop_stem = Ranker(InvertedIndex(corpus, document_stop_stem_function))
