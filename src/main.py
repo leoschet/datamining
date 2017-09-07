@@ -43,9 +43,20 @@ LOGGER.info('Indexers and Rankers created')
 
 # Queries
 LOGGER.info('Running queries and calculating ranker results correlation')
-queries = ['virtual reality overview', 'webgl and player settings', 'the networked state of the game']
+queries = [
+    'virtual reality overview',
+    '"virtual reality overview"',
+    # 'webgl and player settings',
+    # 'the networked state of the game'
+]
 for query in queries:
-    search_results = {ranker: rankers[ranker].search(query) for ranker in rankers}
+    search_results = {ranker_name: rankers[ranker_name].search(query) for ranker_name in rankers}
+    print('Query result comparative')
+    ranker_names = [*search_results.keys()]
+    print(ranker_names)
+    merged_ranker_results = [*zip(*search_results.values())]
+    for merged_ranker_result in merged_ranker_results:
+        print(merged_ranker_result)
     print('Correlation between search results for query: %s' % query)
     for i in range(len(search_results)):
         for j in range(len(search_results)):

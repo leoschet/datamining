@@ -1,4 +1,5 @@
 import math
+from functools import reduce
 
 from ranker.inverted_index import InvertedIndex
 from ranker.text_operators import WHITESPACE_REGEX
@@ -73,15 +74,60 @@ class Ranker:
         denominator = query_vec_mag * doc_vec_mag
         return 0 if denominator == 0 else sum(map(lambda x, y: x * y, query_vec, doc_vec)) / denominator
 
-    def search(self, query):
+    def search(self, query: str):
         """
         Searches the query in documents of the ranker.
 
         :param query: query to search
-        :return: list of tuples with only possible relevant documents ordered by similarity
+        :return: list of tuples with possible relevant documents ordered by similarity
+        """
+        query = query.strip()
+        if query.startswith('"') and query.endswith('"'):
+            return self._exact_search(query)
+        else:
+            return self._default_search(query)
+
+    def _default_search(self, query):
+        """
+        Runs a simple search with any document that contains any of the query terms.
+
+        :param query: the query
+        :return: list of tuples with possible relevant documents ordered by similarity
         """
         terms = self._inverted_index.clean_func(WHITESPACE_REGEX.sub(' ', query).split(' '))
+        terms = [term for term in terms if term in self._inverted_index.term_docs]
+        common_term_docs = {*[doc for term in terms for doc in self._inverted_index.term_docs[term][1]]}
         query_vec, query_vec_mag = self._calculate_query_vec(terms)
-        common_term_docs = set([doc for term in terms for doc in self._inverted_index.term_docs[term][1]])
         similarities = [(doc, self._calculate_similarity(query_vec, query_vec_mag, doc)) for doc in common_term_docs]
         return sorted(similarities, key=lambda tup: tup[1], reverse=True)
+
+    def _exact_search(self, query):
+        """
+        Runs an exact search of the received query.
+        :param query: the query
+        :return: list of tuples with exact matches
+        """
+        query = query[1:len(query) - 1]
+        terms = self._inverted_index.clean_func(WHITESPACE_REGEX.sub(' ', query).split(' '))
+        query_terms_len = len(terms)
+        terms = [term for term in terms if term in self._inverted_index.term_docs]
+        filtered_query_terms_len = len(terms)
+        if query_terms_len != filtered_query_terms_len or query_terms_len == 0:
+            return []  # some terms in query does not exits in the inverted index or terms is empty
+        common_term_docs = reduce(lambda x, y: x & y, [{*self._inverted_index.term_docs[term][1]} for term in terms])
+        if not common_term_docs:
+            return []  # there is no document with all query terms
+        common_sq_term_docs = []
+        for doc in common_term_docs:
+            doc_terms_positions = [self._inverted_index.term_docs[term][1][doc] for term in terms]
+            if not reduce(self._find_consecutive_values, doc_terms_positions):
+                common_sq_term_docs.append(doc)
+        if not common_sq_term_docs:
+            return []  # there is no document with all query terms in sequence
+        query_vec, query_vec_mag = self._calculate_query_vec(terms)
+        similarities = [(doc, self._calculate_similarity(query_vec, query_vec_mag, doc)) for doc in common_sq_term_docs]
+        return sorted(similarities, key=lambda tup: tup[1], reverse=True)
+
+    @staticmethod
+    def _find_consecutive_values(list1, list2):
+        return [y for x in list1 for y in list2 if y > x and y - x <= 2]

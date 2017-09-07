@@ -8,7 +8,7 @@ HTML_TAGS_REGEX = re.compile(r'<[^>]*>')
 WHITESPACE_REGEX = re.compile(r'( |\n|[^A-Za-z0-9])+')
 
 # English stopwords and stemmer
-ENGLISH_STOPWORDS = {word: None for word in nltk.corpus.stopwords.words('english')}
+ENGLISH_STOPWORDS = {word for word in nltk.corpus.stopwords.words('english')}
 PORTER_STEMMER = nltk.stem.PorterStemmer()
 
 
