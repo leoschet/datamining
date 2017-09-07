@@ -1,7 +1,7 @@
 import math
 
-from scripts.inverted_index import InvertedIndex
-from scripts.text_operators import WHITESPACE_REGEX
+from ranker.inverted_index import InvertedIndex
+from ranker.text_operators import WHITESPACE_REGEX
 
 
 class Ranker:

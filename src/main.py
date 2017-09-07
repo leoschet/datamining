@@ -2,10 +2,10 @@ import logging
 import os
 import sys
 
-from scripts.inverted_index import InvertedIndex
-from scripts.ranker import Ranker
-from scripts.spearman_correlation import spearman_correlation
-from scripts.text_operators import split_html_doc, filter_terms
+from ranker.inverted_index import InvertedIndex
+from ranker.ranker import Ranker
+from ranker.text_operators import split_html_doc, filter_terms
+from spearman_correlation import spearman_correlation
 
 # Logging
 LOGGER = logging.getLogger()
@@ -17,7 +17,7 @@ LOGGER.addHandler(HANDLER)
 
 # Corpus generation
 LOGGER.info('Reading corpus')
-corpus_dir = '../resources/corpus'
+corpus_dir = '../res/corpus'
 corpus = {}
 for _, _, files in os.walk(corpus_dir):
     for file in files:
