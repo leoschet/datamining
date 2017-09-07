@@ -63,6 +63,7 @@ class Ranker:
     def _calculate_similarity(self, query_vec, query_vec_mag, doc):
         """
         Calculates the cosine similarity between the received query vector and the doc.
+
         :param query_vec: query vector
         :param query_vec_mag: query vector magnitude
         :param doc: document name
@@ -77,9 +78,10 @@ class Ranker:
         Searches the query in documents of the ranker.
 
         :param query: query to search
-        :return: list of tuples with all documents ordered by similarity
+        :return: list of tuples with only possible relevant documents ordered by similarity
         """
-        query_terms = self._inverted_index.clean_func(WHITESPACE_REGEX.sub(' ', query).split(' '))
-        query_vec, query_vec_mag = self._calculate_query_vec(query_terms)
-        similarities = [(doc, self._calculate_similarity(query_vec, query_vec_mag, doc)) for doc in self._doc_vecs]
+        terms = self._inverted_index.clean_func(WHITESPACE_REGEX.sub(' ', query).split(' '))
+        query_vec, query_vec_mag = self._calculate_query_vec(terms)
+        common_term_docs = set([doc for term in terms for doc in self._inverted_index.term_docs[term][1]])
+        similarities = [(doc, self._calculate_similarity(query_vec, query_vec_mag, doc)) for doc in common_term_docs]
         return sorted(similarities, key=lambda tup: tup[1], reverse=True)
