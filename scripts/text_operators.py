@@ -24,16 +24,17 @@ def clear_html_document(html):
 
 def clear_words(words, remove_stopwords=True, apply_stemming=True):
     """
-    Put words in lower case, removing stopwords and stemming if required.
+    Put words in lower case and removing spaces and empty strings, if required, stopwords are removed and stemming
+    applied to the words.
 
     :param words: list of words to clear
     :param remove_stopwords: if should remove english stopwords
     :param apply_stemming: if should apply stemming in the words
     :return: the processed list of words, the original is not modified
     """
-    words = [word.lower() for word in words]
+    words = [word.lower() for word in words if word != '' and word != ' ']
     if remove_stopwords:
-        words = [word for word in words if word not in ENGLISH_STOPWORDS and word != '' and word != ' ']
+        words = [word for word in words if word not in ENGLISH_STOPWORDS]
     if apply_stemming:
         words = [PORTER_STEMMER.stem(word) for word in words]
     return words

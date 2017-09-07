@@ -7,7 +7,7 @@ class InvertedIndex:
         """
         Initializes the inverted index with the received corpus.
 
-        :param corpus: dict of document names to document words list
+        :param corpus: documents to terms dict
         :param clean_function: function the process a list of words
         """
         self.processed_corpus = {}
@@ -19,23 +19,22 @@ class InvertedIndex:
         """
         Creates the term_documents dict based on the processed_corpus that is generated using the clean_function.
 
-        :param corpus: list of document names and words
+        :param corpus: documents to terms dict
         """
-        for document_name in corpus:
-            document_words = self.clean_function(corpus[document_name]) \
-                if self.clean_function is not None else corpus[document_name]
-            self.processed_corpus[document_name] = document_words
-            for index, word in enumerate(document_words):
+        for document in corpus:
+            terms = self.clean_function(corpus[document]) if self.clean_function is not None else corpus[document]
+            self.processed_corpus[document] = terms
+            for index, word in enumerate(terms):
                 if word not in self.term_documents:
                     self.term_documents[word] = (0, {})
-                if document_name not in self.term_documents[word][1]:
-                    self.term_documents[word][1][document_name] = (0, [])
+                if document not in self.term_documents[word][1]:
+                    self.term_documents[word][1][document] = (0, [])
                 self.term_documents[word] = (
                     self.term_documents[word][0] + 1,
                     self.term_documents[word][1]
                 )
-                self.term_documents[word][1][document_name] = (
-                    self.term_documents[word][1][document_name][0] + 1,
-                    self.term_documents[word][1][document_name][1]
+                self.term_documents[word][1][document] = (
+                    self.term_documents[word][1][document][0] + 1,
+                    self.term_documents[word][1][document][1]
                 )
-                self.term_documents[word][1][document_name][1].append(index)
+                self.term_documents[word][1][document][1].append(index)
