@@ -4,6 +4,7 @@ import sys
 
 from scripts.inverted_index import InvertedIndex
 from scripts.ranker import Ranker
+from scripts.spearman_correlation import spearman_correlation
 from scripts.text_operators import split_html_doc, filter_terms
 
 # Logging
@@ -41,11 +42,17 @@ for config in configs:
 LOGGER.info('Indexers and Rankers created')
 
 # Queries
-LOGGER.info('Running queries')
-search_results = {}
-for ranker in rankers:
-    search_results[ranker] = rankers[ranker].search('virtual reality overview')
-
-searches = zip(*[search_results[search_result] for search_result in search_results])
-for documents in searches:
-    print(documents)
+LOGGER.info('Running queries and calculating ranker results correlation')
+queries = ['virtual reality overview', 'webgl and player settings', 'the networked state of the game']
+for query in queries:
+    search_results = {ranker: rankers[ranker].search(query) for ranker in rankers}
+    print('Correlation between search results for query: %s' % query)
+    for i in range(len(search_results)):
+        for j in range(len(search_results)):
+            if i >= j:
+                continue
+            correlation = spearman_correlation(
+                map(lambda tup: tup[0], search_results[configs[i]['name']]),
+                map(lambda tup: tup[0], search_results[configs[j]['name']])
+            )
+            print('Correlation between %s and %s: %d' % (configs[i]['name'], configs[j]['name'], correlation))
