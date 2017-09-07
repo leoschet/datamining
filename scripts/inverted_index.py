@@ -1,40 +1,40 @@
 class InvertedIndex:
     """
-    Inverted index of the received documents.
+    Inverted index of the received docs.
+
+    Contains the following fields:
+
+    :clean_func: used to clean and filter the received corpus doc terms
+    :proc_corpus: resultant corpus from applying clean_func in the original corpus
+    :term_docs: dict of term -> (term_frequency, {doc: [term_doc_indices]})
     """
 
-    def __init__(self, corpus, clean_function=None):
+    def __init__(self, corpus, clean_func=None):
         """
         Initializes the inverted index with the received corpus.
 
-        :param corpus: documents to terms dict
-        :param clean_function: function the process a list of words
+        :param corpus: docs to terms dict
+        :param clean_func: function the process a list of words
         """
-        self.processed_corpus = {}
-        self.term_documents = {}
-        self.clean_function = clean_function
-        self._build_inverted_index(corpus)
+        self.clean_func = clean_func if clean_func is not None else lambda x: x
+        self.proc_corpus = {doc: self.clean_func(corpus[doc]) for doc in corpus}
+        self.term_docs = self._build_term_docs(self.proc_corpus)
 
-    def _build_inverted_index(self, corpus):
+    @staticmethod
+    def _build_term_docs(corpus):
         """
-        Creates the term_documents dict based on the processed_corpus that is generated using the clean_function.
+        Creates the term_docs dict based on the received corpus.
 
-        :param corpus: documents to terms dict
+        :param corpus: docs to terms dict
         """
-        for document in corpus:
-            terms = self.clean_function(corpus[document]) if self.clean_function is not None else corpus[document]
-            self.processed_corpus[document] = terms
-            for index, word in enumerate(terms):
-                if word not in self.term_documents:
-                    self.term_documents[word] = (0, {})
-                if document not in self.term_documents[word][1]:
-                    self.term_documents[word][1][document] = (0, [])
-                self.term_documents[word] = (
-                    self.term_documents[word][0] + 1,
-                    self.term_documents[word][1]
-                )
-                self.term_documents[word][1][document] = (
-                    self.term_documents[word][1][document][0] + 1,
-                    self.term_documents[word][1][document][1]
-                )
-                self.term_documents[word][1][document][1].append(index)
+        term_docs = {}
+        for doc in corpus:
+            terms = corpus[doc]
+            for index, term in enumerate(terms):
+                if term not in term_docs:
+                    term_docs[term] = (0, {})
+                if doc not in term_docs[term][1]:
+                    term_docs[term][1][doc] = []
+                term_docs[term] = (term_docs[term][0] + 1, term_docs[term][1])
+                term_docs[term][1][doc].append(index)
+        return term_docs

@@ -12,29 +12,29 @@ ENGLISH_STOPWORDS = {word: None for word in nltk.corpus.stopwords.words('english
 PORTER_STEMMER = nltk.stem.PorterStemmer()
 
 
-def clear_html_document(html):
+def split_html_doc(html):
     """
-    Removes html scripts, tags and splits by whitespaces, retuning a list of words.
+    Removes html scripts, tags and splits by whitespaces, retuning a list of terms.
 
     :param html: the html in a string
-    :return: a list of words of the html
+    :return: a list of terms of the html
     """
     return WHITESPACE_REGEX.split(HTML_TAGS_REGEX.sub(' ', SCRIPT_TAG_REGEX.sub(' ', html)))
 
 
-def clear_words(words, remove_stopwords=True, apply_stemming=True):
+def filter_terms(terms, remove_stopwords=True, apply_stemming=True):
     """
-    Put words in lower case and removing spaces and empty strings, if required, stopwords are removed and stemming
-    applied to the words.
+    Put terms in lower case and removing spaces and empty strings, if required, stopwords are removed and stemming is
+    applied.
 
-    :param words: list of words to clear
+    :param terms: list of terms to process
     :param remove_stopwords: if should remove english stopwords
-    :param apply_stemming: if should apply stemming in the words
-    :return: the processed list of words, the original is not modified
+    :param apply_stemming: if should apply stemming in the terms
+    :return: the processed list of terms, the original is not modified
     """
-    words = [word.lower() for word in words if word != '' and word != ' ']
+    terms = [word.lower() for word in terms if word != '' and word != ' ']
     if remove_stopwords:
-        words = [word for word in words if word not in ENGLISH_STOPWORDS]
+        terms = [word for word in terms if word not in ENGLISH_STOPWORDS]
     if apply_stemming:
-        words = [PORTER_STEMMER.stem(word) for word in words]
-    return words
+        terms = [PORTER_STEMMER.stem(word) for word in terms]
+    return terms

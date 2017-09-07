@@ -4,9 +4,9 @@ import sys
 
 from scripts.inverted_index import InvertedIndex
 from scripts.ranker import Ranker
-from scripts.text_operators import clear_html_document, clear_words
+from scripts.text_operators import split_html_doc, filter_terms
 
-# -- Logging
+# Logging
 LOGGER = logging.getLogger()
 LOGGER.setLevel(logging.DEBUG)
 HANDLER = logging.StreamHandler(sys.stdout)
@@ -14,33 +14,33 @@ HANDLER.setLevel(logging.DEBUG)
 HANDLER.setFormatter(logging.Formatter('[%(asctime)s]::%(message)s'))
 LOGGER.addHandler(HANDLER)
 
-# -- Corpus generation from documents
+# Corpus generation
 LOGGER.info('Reading corpus')
 corpus_dir = '../resources/corpus'
 corpus = {}
 for _, _, files in os.walk(corpus_dir):
     for file in files:
-        LOGGER.debug('Reading corpus file %s' % file)
         content = open(corpus_dir + '/' + file, mode='r', encoding='utf-8').read()
-        corpus[file] = clear_html_document(content)
+        corpus[file] = split_html_doc(content)
 LOGGER.info('Corpus loaded, document count: %d' % len(corpus))
 
-# -- Creating indexers and rankers
+# Indexers and rankers
 LOGGER.info('Creating indexes and rankers')
-inverted_index_configurations = [
-    {'name': 'clean', 'clean_function': lambda words: clear_words(words, remove_stopwords=False, apply_stemming=False)},
-    {'name': 'stop', 'clean_function': lambda words: clear_words(words, apply_stemming=False)},
-    {'name': 'stem', 'clean_function': lambda words: clear_words(words, remove_stopwords=False)},
-    {'name': 'stop_stem', 'clean_function': lambda words: clear_words(words)}
+configs = [
+    {'name': 'clean', 'clean_func': lambda terms: filter_terms(terms, remove_stopwords=False, apply_stemming=False)},
+    {'name': 'stop', 'clean_func': lambda terms: filter_terms(terms, apply_stemming=False)},
+    {'name': 'stem', 'clean_func': lambda terms: filter_terms(terms, remove_stopwords=False)},
+    {'name': 'stop_stem', 'clean_func': lambda terms: filter_terms(terms)}
 ]
 rankers = {}
-for configuration in inverted_index_configurations:
-    LOGGER.debug('Creating inverted index %s' % configuration['name'])
-    inverted_index = InvertedIndex(corpus, configuration['clean_function'])
-    LOGGER.debug('Creating ranker %s' % configuration['name'])
-    rankers[configuration['name']] = Ranker(inverted_index)
+for config in configs:
+    LOGGER.debug('Creating inverted index %s' % config['name'])
+    inverted_index = InvertedIndex(corpus, config['clean_func'])
+    LOGGER.debug('Creating ranker %s' % config['name'])
+    rankers[config['name']] = Ranker(inverted_index)
 LOGGER.info('Indexers and Rankers created')
 
+# Queries
 LOGGER.info('Running queries')
 search_results = {}
 for ranker in rankers:
