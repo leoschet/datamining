@@ -37,7 +37,7 @@
 0.25 - Audio.html
 0.25 - AudioFiles.html
 0.25 - AudioMixer.html
-.html 1 - AudioOvervie
+1.00 - AudioOverview.html
 0.10 - AudioProfiler.html
 0.10 - AudioReference.html
 0.25 - AudioSpatializerSDK.html
@@ -83,7 +83,7 @@
 0.00 - CreatingComponents.html
 0.00 - CreatingGameplay.html
 0.00 - CreatingScenes.html
-0.5 - CrossPlatformConsiderations.html
+0.50 - CrossPlatformConsiderations.html
 0.00 - CullingGroupAPI.html
 0.00 - CustomizingYourWorkspace.html
 0.10 - CustomRenderTextures.html
@@ -196,7 +196,7 @@
 0.00 - ParticleSystems.html
 0.00 - PhysicsOverview.html
 0.00 - PhysicsSection.html
-0.5 - Playables.html
+0.50 - Playables.html
 0.00 - PluginInspector.html
 0.00 - Plugins.html
 0.00 - PositioningGameObjects.html
