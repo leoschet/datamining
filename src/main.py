@@ -70,15 +70,21 @@ def get_default_rankers():
     return build_rankers(corpus, DEFAULT_CONFIGS)
 
 
-def search_query(query, rankers):
+def search_query(query, rankers, all_docs=False):
     """
     Search the received query in the rankers.
     :param query: a str with the query
     :param rankers: {ranker_name:ranker}
     :return: ({ranker_name:[(document, similarity$dec_ord)]}, {(ranker1, ranker2):correlation})
     """
-    LOGGER.info('Running query %s' % query)
-    results = {ranker_name: rankers[ranker_name].search(query) for ranker_name in rankers}
+    LOGGER.info('Running query: %s, all_docs: %s' % (query, all_docs))
+    results = {ranker_name: rankers[ranker_name].search(query, all_docs) for ranker_name in rankers}
+    for ranker_name in results:
+        result = results[ranker_name]
+        print (ranker_name)
+        for doc, similarity in result:
+            print(doc)
+        print()
     correlations = {}
     """
     LOGGER.info('Calculating correlations')

@@ -74,37 +74,44 @@ class Ranker:
         denominator = query_vec_mag * doc_vec_mag
         return 0 if denominator == 0 else sum(map(lambda x, y: x * y, query_vec, doc_vec)) / denominator
 
-    def search(self, query: str):
+    def search(self, query, all_docs=False):
         """
         Searches the query in documents of the ranker.
 
         :param query: query to search
+        :param all_docs: if should check and return all documents
         :return: list of tuples with possible relevant documents ordered by similarity
         """
         query = query.strip()
         if query.startswith('"') and query.endswith('"'):
-            return self._exact_search(query)
+            return self._exact_search(query, all_docs)
         else:
-            return self._default_search(query)
+            return self._default_search(query, all_docs)
 
-    def _default_search(self, query):
+    def _default_search(self, query, all_docs):
         """
         Runs a simple search with any document that contains any of the query terms.
 
         :param query: the query
+        :param all_docs: if should check and return all documents
         :return: list of tuples with possible relevant documents ordered by similarity
         """
         terms = self._inverted_index.clean_func(WHITESPACE_REGEX.sub(' ', query).split(' '))
         terms = [term for term in terms if term in self._inverted_index.term_docs]
-        common_term_docs = {*[doc for term in terms for doc in self._inverted_index.term_docs[term][1]]}
+        common_term_docs = None
+        if all_docs:
+            common_term_docs = self._inverted_index.proc_corpus.keys()
+        else:
+            common_term_docs = {*[doc for term in terms for doc in self._inverted_index.term_docs[term][1]]}
         query_vec, query_vec_mag = self._calculate_query_vec(terms)
         similarities = [(doc, self._calculate_similarity(query_vec, query_vec_mag, doc)) for doc in common_term_docs]
         return sorted(similarities, key=lambda tup: tup[1], reverse=True)
 
-    def _exact_search(self, query):
+    def _exact_search(self, query, all_docs):
         """
         Runs an exact search of the received query.
         :param query: the query
+        :param all_docs: if should check and return all documents
         :return: list of tuples with exact matches
         """
         query = query[1:len(query) - 1]
@@ -126,6 +133,10 @@ class Ranker:
             return []  # there is no document with all query terms in sequence
         query_vec, query_vec_mag = self._calculate_query_vec(terms)
         similarities = [(doc, self._calculate_similarity(query_vec, query_vec_mag, doc)) for doc in common_sq_term_docs]
+        if all_docs:
+            similarities_set = {doc for doc, similarity in similarities}
+            other_docs = [(doc, 0) for doc in self._inverted_index.proc_corpus.keys() if doc not in similarities_set]
+            similarities.extend(other_docs)
         return sorted(similarities, key=lambda tup: tup[1], reverse=True)
 
     @staticmethod

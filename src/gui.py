@@ -16,6 +16,10 @@ class Gui(Tk):
         self.search_button = Button(self.search_frame, text='search', command=self.search_query)
         self.search_button.pack(side=LEFT)
         #
+        self.get_all_var = IntVar()
+        self.get_all_option = Checkbutton(self.search_frame, text='get all', variable=self.get_all_var)
+        self.get_all_option.pack(side=LEFT)
+        #
         self.search_result_frame = Frame(self)
         self.search_result_frame.pack(side=TOP)
         #
@@ -35,7 +39,7 @@ class Gui(Tk):
 
     def search_query(self):
         query = self.search_entry.get()
-        results, correlation = main.search_query(query, rankers)
+        results, correlation = main.search_query(query, rankers, True if self.get_all_var.get() == 1 else False)
         for result in results:
             result_list = results[result]
             list_box = self.list_boxes[result]
