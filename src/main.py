@@ -80,6 +80,7 @@ def search_query(query, rankers):
     LOGGER.info('Running query %s' % query)
     results = {ranker_name: rankers[ranker_name].search(query) for ranker_name in rankers}
     correlations = {}
+    """
     LOGGER.info('Calculating correlations')
     for i, ranker_name1 in enumerate(results):
         for j, ranker_name2 in enumerate(results):
@@ -92,6 +93,7 @@ def search_query(query, rankers):
             LOGGER.info('Correlation between %s and %s: %d' % (ranker_name1, ranker_name2, correlation))
             correlations[(ranker_name1, ranker_name2)] = correlation
             correlations[(ranker_name2, ranker_name1)] = correlation
+    """
     return results, correlations
 
 
