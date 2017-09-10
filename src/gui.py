@@ -1,4 +1,5 @@
 from tkinter import *
+import webbrowser
 
 import main
 
@@ -33,6 +34,8 @@ class Gui(Tk):
             ranker_list_box_scroll.pack(side=LEFT)
             #
             ranker_list_box = Listbox(ranker_list_box_scroll)
+            ranker_list_box.bind('<Double-Button-1>', self.on_click_document)
+
             ranker_list_box.pack()
             #
             self.list_boxes[ranker] = ranker_list_box
@@ -46,5 +49,12 @@ class Gui(Tk):
             list_box.delete(0, list_box.size() - 1)
             list_box.insert(0, *['%d - %s' % (index, doc) for index, (doc, similarity) in enumerate(result_list)])
 
+    def on_click_document(self, event):
+        list_box = event.widget
+        selection=list_box.curselection()
+        value = list_box.get(selection[0])
+        link = 'https://docs.unity3d.com/Manual/%s' % value.split(' - ')[1].strip('\n').strip(' ')
+        chrome_path = 'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe %s'
+        webbrowser.get(chrome_path).open(link)
 
 Gui(rankers).mainloop()
