@@ -79,12 +79,14 @@ def search_query(query, rankers, all_docs=False):
     """
     LOGGER.info('Running query: %s, all_docs: %s' % (query, all_docs))
     results = {ranker_name: rankers[ranker_name].search(query, all_docs) for ranker_name in rankers}
+    """
     for ranker_name in results:
         result = results[ranker_name]
         print (ranker_name)
         for doc, similarity in result:
             print(doc)
         print()
+    """
     correlations = {}
     """
     LOGGER.info('Calculating correlations')
