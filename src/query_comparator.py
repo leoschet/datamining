@@ -19,7 +19,7 @@ for query_info in queries:
     print('query: %s' % query_info['query'])
 
     print('reading query manual classification file')
-    print('relevancy threshold set to %d' % relevancy_threshold)
+    print('relevancy threshold set to %f' % relevancy_threshold)
     relevant_documents = {None}
     for line in open(query_info['checker_file']):
         if line.startswith('#') or len(line) < 5:
