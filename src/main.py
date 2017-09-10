@@ -15,55 +15,92 @@ HANDLER.setLevel(logging.DEBUG)
 HANDLER.setFormatter(logging.Formatter('[%(asctime)s]::%(message)s'))
 LOGGER.addHandler(HANDLER)
 
-# Corpus generation
-LOGGER.info('Reading corpus')
-corpus_dir = '../res/corpus'
-corpus = {}
-for _, _, files in os.walk(corpus_dir):
-    for file in files:
-        content = open(corpus_dir + '/' + file, mode='r', encoding='utf-8').read()
-        corpus[file] = split_html_doc(content)
-LOGGER.info('Corpus loaded, document count: %d' % len(corpus))
 
-# Indexers and rankers
-LOGGER.info('Creating indexes and rankers')
-configs = [
-    {'name': 'clean', 'clean_func': lambda terms: filter_terms(terms, remove_stopwords=False, apply_stemming=False)},
+def read_corpus(corpus_dir):
+    """
+    Read de corpus html files from the received directory.
+    :param corpus_dir: corpus directory
+    :return: {doc_name:[doc_terms]}
+    """
+    LOGGER.info('Reading corpus')
+    corpus = {}
+    for _, _, files in os.walk(corpus_dir):
+        for file in files:
+            content = open(corpus_dir + '/' + file, mode='r', encoding='utf-8').read()
+            corpus[file] = split_html_doc(content)
+    LOGGER.info('Corpus loaded, document count: %d' % len(corpus))
+    return corpus
+
+
+def build_rankers(corpus, configs):
+    """
+    build the inverted indexes and rankers with the received corpus and configurations.
+    :param corpus: the corpus dict {doc_name:[doc_terms]}
+    :param configs: the configurations [{'name':'ranker_name', 'clean_func':func(['x']):['x'']}]
+    :return: {ranker_name:ranker}
+    """
+    LOGGER.info('Creating indexes and rankers')
+    rankers = {}
+    for config in configs:
+        LOGGER.debug('Creating inverted index %s' % config['name'])
+        inverted_index = InvertedIndex(corpus, config['clean_func'])
+        LOGGER.debug('Creating ranker %s' % config['name'])
+        rankers[config['name']] = Ranker(inverted_index)
+    LOGGER.info('Indexers and Rankers created')
+    return rankers
+
+
+# Default rankers configurations
+DEFAULT_CONFIGS = [
+    {'name': 'clean',
+     'clean_func': lambda terms: filter_terms(terms, remove_stopwords=False, apply_stemming=False)},
     {'name': 'stop', 'clean_func': lambda terms: filter_terms(terms, apply_stemming=False)},
     {'name': 'stem', 'clean_func': lambda terms: filter_terms(terms, remove_stopwords=False)},
     {'name': 'stop_stem', 'clean_func': lambda terms: filter_terms(terms)}
 ]
-rankers = {}
-for config in configs:
-    LOGGER.debug('Creating inverted index %s' % config['name'])
-    inverted_index = InvertedIndex(corpus, config['clean_func'])
-    LOGGER.debug('Creating ranker %s' % config['name'])
-    rankers[config['name']] = Ranker(inverted_index)
-LOGGER.info('Indexers and Rankers created')
+
+
+def get_default_rankers():
+    """
+    Returns the default 4 rankers of the local corpus ('clean', 'stop', 'stem', 'stop_stem').
+    :return: {ranker_name:ranker}
+    """
+    corpus_dir = '../res/corpus'
+    corpus = read_corpus(corpus_dir)
+    return build_rankers(corpus, DEFAULT_CONFIGS)
+
+
+def search_query(query, rankers):
+    """
+    Search the received query in the rankers.
+    :param query: a str with the query
+    :param rankers: {ranker_name:ranker}
+    :return: ({ranker_name:[(document, similarity$dec_ord)]}, {(ranker1, ranker2):correlation})
+    """
+    LOGGER.info('Running query %s' % query)
+    results = {ranker_name: rankers[ranker_name].search(query) for ranker_name in rankers}
+    correlations = {}
+    LOGGER.info('Calculating correlations')
+    for i, ranker_name1 in enumerate(results):
+        for j, ranker_name2 in enumerate(results):
+            if i >= j:
+                continue
+            correlation = spearman_correlation(
+                map(lambda tup: tup[0], results[ranker_name1]),
+                map(lambda tup: tup[0], results[ranker_name2])
+            )
+            LOGGER.info('Correlation between %s and %s: %d' % (ranker_name1, ranker_name2, correlation))
+            correlations[(ranker_name1, ranker_name2)] = correlation
+            correlations[(ranker_name2, ranker_name1)] = correlation
+    return results, correlations
+
 
 # Queries
-LOGGER.info('Running queries and calculating ranker results correlation')
+"""
 queries = [
     'virtual reality overview',
     '"virtual reality overview"',
     # 'webgl and player settings',
     # 'the networked state of the game'
 ]
-for query in queries:
-    search_results = {ranker_name: rankers[ranker_name].search(query) for ranker_name in rankers}
-    print('Query result comparative')
-    ranker_names = [*search_results.keys()]
-    print(ranker_names)
-    merged_ranker_results = [*zip(*search_results.values())]
-    for merged_ranker_result in merged_ranker_results:
-        print(merged_ranker_result)
-    print('Correlation between search results for query: %s' % query)
-    for i in range(len(search_results)):
-        for j in range(len(search_results)):
-            if i >= j:
-                continue
-            correlation = spearman_correlation(
-                map(lambda tup: tup[0], search_results[configs[i]['name']]),
-                map(lambda tup: tup[0], search_results[configs[j]['name']])
-            )
-            print('Correlation between %s and %s: %d' % (configs[i]['name'], configs[j]['name'], correlation))
+"""
